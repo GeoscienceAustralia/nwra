@@ -107,7 +107,7 @@ def main(config: str, verbose=False):
                            "prov:type": "prov:Person"})
 
     orgagent = prov.agent(
-        "GeoscienceAustralia",
+        ":GeoscienceAustralia",
         {
             "prov:type": "prov:Organisation",
             "foaf:name": "Geoscience Australia"},
@@ -136,13 +136,12 @@ def main(config: str, verbose=False):
     )
 
     prov.wasAttributedTo(processingact, f":{getpass.getuser()}")
-    prov.actedOnBehalfOf(f":{getpass.getuser()}", "GeoscienceAustralia")
+    prov.actedOnBehalfOf(f":{getpass.getuser()}", ":GeoscienceAustralia")
     prov.used(provlabel, configent)
     prov.used(provlabel, "nwra:smoothedregionalwindrasters")
     prov.wasAssociatedWith(processingact, sys.argv[0])
 
-    prov.serialize(os.path.join(
-        outputDir, "applymultipliers.xml"), format="xml")
+    prov.serialize("applymultipliers.xml", format="xml")
 
     for key in g_files.keys():
         LOGGER.info(f"Processed {len(g_files[key])} {key} files")
