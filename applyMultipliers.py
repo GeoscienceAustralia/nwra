@@ -103,7 +103,8 @@ def main(config: str, verbose=False):
     )
 
     # We use the current user as the primary agent:
-    useragent = prov.agent(f":{getpass.getuser()}", {"prov:type": "prov:Person"})
+    useragent = prov.agent(f":{getpass.getuser()}", {
+                           "prov:type": "prov:Person"})
 
     orgagent = prov.agent(
         "GeoscienceAustralia",
@@ -140,7 +141,8 @@ def main(config: str, verbose=False):
     prov.used(provlabel, "nwra:smoothedregionalwindrasters")
     prov.wasAssociatedWith(processingact, sys.argv[0])
 
-    prov.serialize(os.path.join(outputDir, "applymultipliers.xml"), format="xml")
+    prov.serialize(os.path.join(
+        outputDir, "applymultipliers.xml"), format="xml")
 
     for key in g_files.keys():
         LOGGER.info(f"Processed {len(g_files[key])} {key} files")
@@ -303,13 +305,18 @@ def processFile(filename, config):
             vrtfiles.append(outputFile)
 
     vrtopts = gdal.BuildVRTOptions(resampleAlg='bilinear')
-    vrtFileName = os.path.join(outputDir, filebase, f"{filebase.replace('smooth', 'local')}.vrt")
+    vrtFileName = os.path.join(
+        outputDir,
+        filebase,
+        f"{filebase.replace('smooth', 'local')}.vrt"
+    )
     try:
         gdal.BuildVRT(vrtFileName, vrtfiles, options=vrtopts)
     except:
         LOGGER.exception(f"Cannot create VRT file {vrtFileName}")
 
     return rc
+
 
 def process(regional_raster: str, multiplier: str, output_raster: str):
     """
@@ -327,7 +334,8 @@ def process(regional_raster: str, multiplier: str, output_raster: str):
     ds2 = gdal.Open(multiplier, gdal.GA_ReadOnly)
 
     if ds1 is None or ds2 is None:
-        LOGGER.exception("Error: One or both input datasets could not be opened.")
+        LOGGER.exception(
+            "Error: One or both input datasets could not be opened.")
         return False
 
     # Read the data from the input rasters into NumPy arrays
@@ -349,10 +357,11 @@ def process(regional_raster: str, multiplier: str, output_raster: str):
         ds2.RasterYSize,
         1,
         gdal.GDT_Float32
-        )
+    )
     tmpds.SetGeoTransform(geotransform2)
     tmpds.SetProjection(match_proj)
-    gdal.ReprojectImage(ds1, tmpds, src_proj, match_proj, gdalconst.GRA_Bilinear)
+    gdal.ReprojectImage(ds1, tmpds, src_proj, match_proj,
+                        gdalconst.GRA_Bilinear)
     resampled_data1 = tmpds.GetRasterBand(1).ReadAsArray()
 
     LOGGER.debug("Apply the mask to multiplier data")
