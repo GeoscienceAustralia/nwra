@@ -9,6 +9,7 @@
 # Craig Arthur
 # 2023-11-23
 
+umask 0002
 
 module purge
 module load pbs

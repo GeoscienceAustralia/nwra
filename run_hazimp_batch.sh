@@ -7,6 +7,7 @@
 #PBS -lwalltime=2:00:00
 #PBS -lmem=512GB,ncpus=48,jobfs=4000MB
 #PBS -joe
+#PBS -v STATE
 #PBS -W umask=0002
 #PBS -lstorage=gdata/w85+scratch/w85
  
@@ -32,11 +33,20 @@ export ncores_per_node=48
 pattern="(RP[0-9]{1,5})_smooth$"
 SOURCEDIR=/scratch/w85/nwra/hazard/local
 SCRIPTDIR=/g/data/w85/software/nwra
-STATE="QLD"
+
+if [ $# -eq 0 ]; then
+    # Use an environment variable
+    STATE=$STATE
+    echo "Running batch HazImp for $STATE from environment variables"
+else
+    STATE=$1
+    echo "Running batch HazImp for $STATE"
+fi
+
 # Remove any existing cmd.txt file:
 [[ -f $SCRIPTDIR/cmd.txt ]] && rm -rf $SCRIPTDIR/cmd.txt
 
-# Add a command for each local wind field:
+# Create a new cmd.txt and add a command for each local wind field:
 for dir in "$SOURCEDIR"/*; do
     echo $dir
     if [[ $dir =~ $pattern ]]; then
