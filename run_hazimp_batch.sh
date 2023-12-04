@@ -4,8 +4,8 @@
 #PBS -N hazimpbatch
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
-#PBS -lwalltime=6:00:00
-#PBS -lmem=1024GB,ncpus=48,jobfs=4000MB
+#PBS -lwalltime=2:00:00
+#PBS -lmem=512GB,ncpus=48,jobfs=4000MB
 #PBS -joe
 #PBS -W umask=0002
 #PBS -lstorage=gdata/w85+scratch/w85
