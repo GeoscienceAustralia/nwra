@@ -32,6 +32,11 @@ export PATH=/g/data/w85/.local/bin:$PATH
 # Needs to be resolved, but this suppresses an error related to HDF5 libs
 export HDF5_DISABLE_VERSION_CHECK=2
 
+# Set the number of datasets that can be opened simultaneously by the
+# GDALProxyPool mechanism (used by VRT).
+# See https://gdal.org/user/configoptions.html
+export GDAL_MAX_DATASET_POOL_SIZE=900
+
 SOFTWARE=/g/data/w85/software
 
 # Add HazImp code to the path:
@@ -40,12 +45,7 @@ export PYTHONPATH=$SOFTWARE/hazimp:$PYTHONPATH
 cd $SOFTWARE/hazimp/
 
 DATE=`date +%Y%m%d%H%M`
-CONFIGDIR=/g/data/w85/software/nwra
-OUTPUTDIR=/scratch/w85/nwra/impact/$STATE
-
-if [ ! -d $OUTPUTDIR ]; then
-    mkdir -p --mode 775 $OUTPUTDIR
-fi
+CONFIGDIR=$SOFTWARE/nwra
 
 if [ $# -eq 0 ]; then
     # Use an environment variable

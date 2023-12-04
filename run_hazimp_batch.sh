@@ -5,7 +5,7 @@
 #PBS -m ae
 #PBS -M craig.arthur@ga.gov.au
 #PBS -lwalltime=6:00:00
-#PBS -lmem=1024GB,ncpus=32,jobfs=4000MB
+#PBS -lmem=1024GB,ncpus=48,jobfs=4000MB
 #PBS -joe
 #PBS -W umask=0002
 #PBS -lstorage=gdata/w85+scratch/w85
@@ -46,4 +46,6 @@ for dir in "$SOURCEDIR"/*; do
     fi
 done
 
-#mpirun -np $((PBS_NCPUS/ncores_per_task))  --map-by ppr:$((ncores_per_node/ncores_per_task)):NODE:PE=${ncores_per_task}:OVERSUBSCRIBE nci-parallel --input-file $SCRIPTDIR/cmd.txt --timeout 4000
+mpirun -np $((PBS_NCPUS/ncores_per_task))  \
+--map-by ppr:$((ncores_per_node/ncores_per_task)):NODE:PE=${ncores_per_task}:OVERSUBSCRIBE nci-parallel \
+--input-file $SCRIPTDIR/cmd.txt --timeout 4000
