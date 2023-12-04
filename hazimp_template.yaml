@@ -1,0 +1,31 @@
+##  python3 /g/data/w85/software/hazimp/hazimp/main.py -c /g/data/w85/QFES_SWHA/configuration/hazimp/EVENTID.yaml
+
+ - template: wind_nc
+
+ - vulnerability:
+    filename: /g/data/w85/data/vulnerability/domestic_wind_2023.xml
+    vulnerability_set: domestic_wind_2023
+    vulnerability_method: 'mean'
+
+ - load_exposure:
+    file_name: /g/data/w85/data/exposure/202311/STATE_TILES_Residential_Wind_Exposure_202311_v13.12_TRCM_new_yr_range.csv
+    exposure_latitude: LATITUDE
+    exposure_longitude: LONGITUDE
+
+ - hazard_raster:
+     file_list: /scratch/w85/nwra/hazard/local/RPX_smooth/RPX_local.vrt
+     file_format: tiff
+
+ - calc_struct_loss:
+     replacement_value_label: REPLACEMENT_VALUE
+
+ - save: /scratch/w85/nwra/impact/STATE/RPX.csv
+
+ - aggregation:
+     groupby: SA1_CODE
+     kwargs:
+      structural: [mean, max]
+      structural_loss: [mean, sum]
+      REPLACEMENT_VALUE: [mean, sum]
+
+ - save_agg: /scratch/w85/nwra/impact/STATE/RPX_agg.csv
