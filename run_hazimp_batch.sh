@@ -8,7 +8,7 @@
 #PBS -lmem=512GB,ncpus=48,jobfs=4000MB
 #PBS -joe
 #PBS -v STATE
-#PBS -W umask=0002
+#PBS -W umask=002
 #PBS -lstorage=gdata/w85+scratch/w85
  
 # Load module, always specify version number.
@@ -55,6 +55,8 @@ for dir in "$SOURCEDIR"/*; do
         echo "/g/data/w85/software/nwra/run_hazimp.sh $RP $STATE" >> $SCRIPTDIR/cmd.txt
     fi
 done
+
+chmod 775 $SCRIPTDIR/cmd.txt
 
 mpirun -np $((PBS_NCPUS/ncores_per_task))  \
 --map-by ppr:$((ncores_per_node/ncores_per_task)):NODE:PE=${ncores_per_task}:OVERSUBSCRIBE nci-parallel \
