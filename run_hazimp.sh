@@ -75,7 +75,7 @@ OUTPUT=/scratch/w85/nwra/impact
 # Substitute the paths into the template configuration file:
 sed 's|RPX|'$RP'|g' /g/data/w85/software/nwra/hazimp_template.yaml > $CONFIGFILE
 sed -i 's|STATE|'$STATE'|g' $CONFIGFILE
-chmod g+w $CONFIGFILE
+chmod 775 $CONFIGFILE
 
 if [ ! -f "$CONFIGFILE" ]; then
     echo "Configuration file does not exist: $CONFIGFILE"
