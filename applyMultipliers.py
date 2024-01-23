@@ -42,7 +42,7 @@ prov.add_namespace("void", "http://vocab.deri.ie/void#")
 prov.add_namespace("dcterms", "http://purl.org/dc/terms/")
 prov.add_namespace("git", "http://github.com/GeoscienceAustralia")
 prov.add_namespace("nwra", "http://www.ga.gova.au/hazards")
-provlabel = ":LocalHazardGeneration"
+provlabel = "nwra:LocalHazardGeneration"
 provtitle = "Local wind hazard generation"
 
 
@@ -92,13 +92,13 @@ def main(config: str, verbose=False):
     commit, tag, dt, url = flGitRepository(sys.argv[0])
 
     prov.agent(
-        sys.argv[0],
+        os.path.split(sys.argv[0])[0],
         {
+            "prov:location": url,
             "dcterms:type": "prov:SoftwareAgent",
             "git:commit": commit,
             "git:tag": tag,
             "dcterms:date": dt,
-            "prov:url": url,
         },
     )
 
@@ -117,10 +117,10 @@ def main(config: str, verbose=False):
     configent = prov.entity(
         ":configurationFile",
         {
-            "dcterms:title": "Configuration file",
+            "prov:location": os.path.basename(config.configFile),
+            "prov:title": "Configuration file",
             "dcterms:type": "foaf:Document",
             "dcterms:format": "Text file",
-            "prov:atLocation": os.path.basename(config.configFile),
         },
     )
 
@@ -189,12 +189,12 @@ def expandFileSpec(config, spec, category):
     )
     dirmtime = flPathTime(origindir)
     specent = prov.collection(
-        f":{spec}",
+        f":{category}",
         {
+            "prov:location": origindir,
+            "prov:GeneratedAt": dirmtime,
             "dcterms:type": "prov:Collection",
             "dcterms:title": category,
-            "prov:atLocation": origindir,
-            "prov:GeneratedAt": dirmtime,
         },
     )
     prov.used(provlabel, specent)
@@ -210,7 +210,7 @@ def expandFileSpec(config, spec, category):
                     prov.entity(
                         f":{os.path.basename(file)}",
                         {
-                            "prov:atLocation": origindir,
+                            "prov:location": origindir,
                             "dcterms:created": flModDate(file),
                         },
                     )
